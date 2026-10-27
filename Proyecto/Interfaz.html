@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLogic - Sistema Experto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen font-sans">
+    
+    <!-- Navbar -->
+    <nav class="bg-[#1e293b] border-b border-slate-700 p-4 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-rose-800/20 p-1.5 rounded-lg border border-rose-500/30">
+                    <!-- Imagen de Logo local -->
+                    <img src="logo.png" alt="FitLogic Logo" class="w-9 h-9 object-cover rounded-md" onerror="this.onerror=null; this.outerHTML='<i class=\'fas fa-dumbbell text-2xl text-rose-500 p-1\'></i>'">
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white leading-tight">FitLogic</h1>
+                    <p class="text-xs text-slate-400">Sistema Experto en Prolog</p>
+                </div>
+            </div>
+            <div class="text-right hidden sm:block">
+                <p class="text-sm font-semibold text-slate-300">IPN - ESCOM</p>
+                <p class="text-xs text-slate-400">Paradigmas de Programación</p>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
+        
+        <!-- Panel de Parámetros -->
+        <div class="bg-[#1e293b] rounded-xl border border-slate-700 p-6 shadow-xl h-fit">
+            <div class="flex items-center gap-2 mb-6">
+                <i class="fas fa-sliders-h text-rose-500"></i>
+                <h2 class="text-lg font-bold text-white">Parámetros</h2>
+            </div>
+            <p class="text-sm text-slate-400 mb-6">Ingresa tus datos para inferir una rutina válida.</p>
+
+            <form id="routine-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Grupo Muscular</label>
+                    <select id="grupo_muscular" class="w-full bg-[#0f172a] border border-slate-600 rounded-lg p-2.5 text-white focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none">
+                        <option value="pecho">Pecho</option>
+                        <option value="espalda">Espalda</option>
+                        <option value="pierna">Pierna</option>
+                        <option value="brazo">Brazo</option>
+                        <option value="abdomen">Abdomen</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Nivel de Experiencia</label>
+                    <select id="nivel" class="w-full bg-[#0f172a] border border-slate-600 rounded-lg p-2.5 text-white focus:border-rose-500 outline-none">
+                        <option value="principiante">Principiante</option>
+                        <option value="intermedio">Intermedio</option>
+                        <option value="avanzado">Avanzado</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Equipamiento Disponible</label>
+                    <select id="equipo" class="w-full bg-[#0f172a] border border-slate-600 rounded-lg p-2.5 text-white focus:border-rose-500 outline-none">
+                        <option value="peso_corporal">Solo peso corporal (Casa)</option>
+                        <option value="mancuernas">Mancuernas básicas</option>
+                        <option value="barras">Barras y discos</option>
+                        <option value="maquinas">Gimnasio completo (Máquinas)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Objetivo Físico</label>
+                    <select id="objetivo" class="w-full bg-[#0f172a] border border-slate-600 rounded-lg p-2.5 text-white focus:border-rose-500 outline-none">
+                        <option value="hipertrofia">Hipertrofia (Ganar músculo)</option>
+                        <option value="fuerza">Fuerza (Levantar más peso)</option>
+                        <option value="resistencia">Resistencia (Tonificar/Cardio)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-4 flex items-center justify-center gap-2">
+                    <i class="fas fa-bolt"></i> Generar Rutina
+                </button>
+            </form>
+        </div>
+
+        <!-- Panel de Resultados -->
+        <div class="lg:col-span-2 flex flex-col gap-4">
+            
+            <!-- Estado: Inicio -->
+            <div id="intro-box" class="bg-[#1e293b] border border-slate-700 rounded-xl p-10 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-robot text-3xl text-slate-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Motor de Inferencia Listo</h3>
+                <p class="text-slate-400 max-w-md">Selecciona los parámetros en el panel lateral y el sistema en Prolog utilizará unificación y backtracking para estructurar tu sesión de 5 ejercicios.</p>
+            </div>
+
+            <!-- Estado: Cargando -->
+            <div id="loading-box" class="hidden bg-[#1e293b] border border-slate-700 rounded-xl p-10 flex flex-col items-center justify-center text-center h-full min-h-[400px]">
+                <i class="fas fa-circle-notch fa-spin text-4xl text-rose-500 mb-4"></i>
+                <p class="text-slate-300 font-medium">Evaluando reglas lógicas en Prolog...</p>
+            </div>
+
+            <!-- Estado: Error (Insuficiencia de datos o sin servidor) -->
+            <div id="error-box" class="hidden bg-red-950/40 border border-red-800 rounded-xl p-6 flex items-start gap-4">
+                <i class="fas fa-exclamation-triangle text-2xl text-red-500 mt-1"></i>
+                <div>
+                    <h3 class="text-lg font-bold text-red-400 mb-1">Inferencia Fallida</h3>
+                    <p id="error-message" class="text-sm text-red-200">No hay 5 ejercicios suficientes en el catálogo para tus requerimientos.</p>
+                </div>
+            </div>
+
+            <!-- Estado: Resultado Exitoso -->
+            <div id="result-box" class="hidden space-y-4">
+                
+                <!-- Encabezado de resultado -->
+                <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-5 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Rutina Generada</h2>
+                        <p id="routine-subtitle" class="text-sm text-slate-400 capitalize">pecho • Nivel principiante • fuerza</p>
+                    </div>
+                    <span class="bg-emerald-900/50 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-800 flex items-center gap-1">
+                        <i class="fas fa-check"></i> Solución Válida
+                    </span>
+                </div>
+
+                <!-- Tarjeta: Calentamiento -->
+                <div class="bg-[#1e293b] border border-amber-700/50 rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
+                    <p class="text-xs font-bold text-amber-500 tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-fire-alt"></i> CALENTAMIENTO SUGERIDO</p>
+                    <p id="calentamiento" class="text-white font-medium text-lg">Rotaciones articulares y aproximación</p>
+                </div>
+
+                <!-- Tarjeta: Volumen -->
+                <div class="bg-[#1e293b] border border-blue-700/50 rounded-xl p-5 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
+                    <p class="text-xs font-bold text-blue-500 tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-chart-bar"></i> VOLUMEN DE ENTRENAMIENTO</p>
+                    <p class="text-white font-medium text-lg"><span id="series" class="text-2xl font-bold">5 series</span> de <span id="reps" class="font-bold">3 a 5 repeticiones</span></p>
+                </div>
+
+                <!-- Lista de Ejercicios -->
+                <div class="mt-2">
+                    <p class="text-xs font-bold text-slate-400 tracking-wider mb-3 uppercase">Ejercicios Seleccionados</p>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-4 flex items-center gap-4 hover:border-slate-500 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-sm shrink-0">1</div>
+                            <p id="ej1" class="text-white font-medium text-lg capitalize">Ejercicio 1</p>
+                        </div>
+                        <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-4 flex items-center gap-4 hover:border-slate-500 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-sm shrink-0">2</div>
+                            <p id="ej2" class="text-white font-medium text-lg capitalize">Ejercicio 2</p>
+                        </div>
+                        <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-4 flex items-center gap-4 hover:border-slate-500 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-sm shrink-0">3</div>
+                            <p id="ej3" class="text-white font-medium text-lg capitalize">Ejercicio 3</p>
+                        </div>
+                        <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-4 flex items-center gap-4 hover:border-slate-500 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-sm shrink-0">4</div>
+                            <p id="ej4" class="text-white font-medium text-lg capitalize">Ejercicio 4</p>
+                        </div>
+                        <div class="bg-[#1e293b] border border-slate-700 rounded-xl p-4 flex items-center gap-4 hover:border-slate-500 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-sm shrink-0">5</div>
+                            <p id="ej5" class="text-white font-medium text-lg capitalize">Ejercicio 5</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('routine-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const resultBox = document.getElementById('result-box');
+            const loadingBox = document.getElementById('loading-box');
+            const introBox = document.getElementById('intro-box');
+            const errorBox = document.getElementById('error-box');
+
+            introBox.classList.add('hidden');
+            resultBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+            loadingBox.classList.remove('hidden');
+
+            const formData = {
+                grupo_muscular: document.getElementById('grupo_muscular').value,
+                nivel: document.getElementById('nivel').value,
+                equipo: document.getElementById('equipo').value,
+                objetivo: document.getElementById('objetivo').value
+            };
+
+            try {
+                // Se conecta mediante HTTP real al servidor local de Prolog
+                const response = await fetch('/api/generar_rutina', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Servidor inalcanzable');
+                }
+
+                const data = await response.json();
+                loadingBox.classList.add('hidden');
+
+                if (data.error) {
+                    document.getElementById('error-message').textContent = data.error;
+                    errorBox.classList.remove('hidden');
+                } else {
+                    document.getElementById('ej1').textContent = data.ejercicio1.replace(/_/g, ' ');
+                    document.getElementById('ej2').textContent = data.ejercicio2.replace(/_/g, ' ');
+                    document.getElementById('ej3').textContent = data.ejercicio3.replace(/_/g, ' ');
+                    document.getElementById('ej4').textContent = data.ejercicio4.replace(/_/g, ' ');
+                    document.getElementById('ej5').textContent = data.ejercicio5.replace(/_/g, ' ');
+                    document.getElementById('series').textContent = `${data.series}`;
+                    document.getElementById('reps').textContent = data.repeticiones;
+                    document.getElementById('calentamiento').textContent = data.calentamiento;
+                    
+                    document.getElementById('routine-subtitle').textContent = `${formData.grupo_muscular} • Nivel ${formData.nivel} • ${formData.objetivo}`;
+
+                    resultBox.classList.remove('hidden');
+                }
+            } catch (error) {
+                loadingBox.classList.add('hidden');
+                document.getElementById('error-message').textContent = "Servidor Prolog inactivo. Ejecuta 'swipl -s Proyecto.pl' y luego 'iniciar_servidor(8000).' en tu terminal.";
+                errorBox.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
